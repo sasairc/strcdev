@@ -24,9 +24,9 @@ strcdev
 		
 
 * GNU Compiler Collection(gcc)	
-	gcc 4.7.2で確認しましたが、特にバージョン依存はないかと。
-
-* GNU bash	
+	gcc 4.7.2で確認しましたが、特にバージョン依存はないかと。	
+* GNU Make  
+* GNU bash  	
 
 #### Build
 * `% ./bootstrap.sh sample_text/yasuna.txt`を実行します。（ファイル名は適時置き換えてください） 
