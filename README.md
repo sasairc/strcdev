@@ -31,7 +31,8 @@ strcdev
 #### Build
 * `% ./bootstrap.sh sample_text/yasuna.txt`を実行します。（ファイル名は適時置き換えてください） 
 	* 空行が削除され`yasuna.txt.tmp`が生成されます。  
-	* 生成された`yasuna.txt.tmp`をもとに、次のような配列に変換され、`convert.txt`として保存されます。
+	* 生成された`yasuna.txt.tmp`をもとに、次のような配列に変換され	
+		`convert.txt`として保存されます。
 	```
 		char* str[] = {
 			"エッ エッ",
@@ -72,7 +73,8 @@ strcdev
 
 #### Digression
 ただ、このままではリブート後に`/dev/strcdev`が消滅（自動作成されない）してしまいます。     
-それを悲しく思う方は、udevにデバイス管理を依頼する、または`/etc/rc.local`などの起動スクリプトに    
+それを悲しく思う方は、udevにデバイス管理を依頼する	
+または`/etc/rc.local`などの起動スクリプトに    
 
 ```
 insmod /lib/modules/`uname -r`/kernel/drivers/block/strcdev.ko
