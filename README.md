@@ -46,7 +46,7 @@ strcdev
 			"ああああ ありがとうございますありがとうございます"
 		};
 	```
-	* 最終的に`strcdev.c.orig`の所定の行に`convert.txt`が挿入され、`strcdev.c`が生成されます。
+	* 最終的に`strcdev.orig.c`の所定の行に`convert.txt`が挿入され、`strcdev.c`が生成されます。
 
 * モジュールのビルド	
 `make`を実行します。
