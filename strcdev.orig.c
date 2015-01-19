@@ -8,10 +8,10 @@
  * for more details.
  */
 
-#define	RANDOM	RANDARG	
-#define	MODNAME	"strcdev"
-#define	CHAR_MAJOR	250
-#define	CHAR_MINOR	1
+#define RANDOM  RANDARG 
+#define MODNAME "strcdev"
+#define CHAR_MAJOR      250
+#define CHAR_MINOR      1
 
 #include <linux/semaphore.h>
 #include <linux/kernel.h>
@@ -28,84 +28,84 @@ MODULE_AUTHOR("sasairc");
 static struct cdev cdev;
 static struct semaphore cdev_sem;
 
-static unsigned int rand_create(void)
+static unsigned int create_rand(void)
 {
-	unsigned int i = 0;
+        unsigned int i = 0;
 
-	get_random_bytes(&i, sizeof(int));
-	i = i % RANDOM;
+        get_random_bytes(&i, sizeof(int));
+        i = i % RANDOM;
 
-	return i;
+        return i;
 }
 
 static char* word_pool(unsigned int i)
 {
 
 
-	return str[i];
+        return str[i];
 }
 
-static int chardev_open(struct inode *inode, struct file *file)
+static int open_chardev(struct inode *inode, struct file *file)
 {
-	return 0;
+        return 0;
 }
 
-static int chardev_release(struct inode *inode, struct file *file)
+static int release_chardev(struct inode *inode, struct file *file)
 {
-	return 0;
+        return 0;
 }
 
-static ssize_t chardev_read(struct file *file, char *buf, size_t count, loff_t *offset)
+static ssize_t read_chardev(struct file *file, char *buf, size_t count, loff_t *offset)
 {
-	unsigned int i;
-	char* str = NULL;
-	
-	down_interruptible(&cdev_sem);
+        unsigned int i;
+        char* str = NULL;
+        
+        down_interruptible(&cdev_sem);
 
-	i = rand_create();
-	str = word_pool(i);
-	copy_to_user(buf, str, strlen(str));
-	*offset += strlen(str);
+        i = create_rand();
+        str = word_pool(i);
+        copy_to_user(buf, str, strlen(str));
+        *offset += strlen(str);
 
-	up(&cdev_sem);
+        up(&cdev_sem);
 
-	return strlen(str);
+        return strlen(str);
 }
 
 static struct file_operations cdev_fops = {
-	.owner	= THIS_MODULE,
-	.open	= chardev_open,
-	.read	= chardev_read,
-	.release = chardev_release,
+        .owner  = THIS_MODULE,
+        .open   = open_chardev,
+        .read   = read_chardev,
+        .release = release_chardev,
 };
 
-static int __init chardev_init(void)
+static int __init init_chardev(void)
 {
-	int ret;
-	dev_t dev;
+        int ret;
+        dev_t dev;
 
-	dev = MKDEV(CHAR_MAJOR, 0);
-	cdev_init(&cdev, &cdev_fops);
+        dev = MKDEV(CHAR_MAJOR, 0);
+        cdev_init(&cdev, &cdev_fops);
 
-	ret = cdev_add(&cdev, dev, CHAR_MINOR);
-	if (ret < 0) {
-		printk(KERN_WARNING "%s: cdev_add() failure.\n", MODNAME);
-		return ret;
-	}
+        ret = cdev_add(&cdev, dev, CHAR_MINOR);
+        if (ret < 0) {
+                printk(KERN_WARNING "%s: cdev_add() failure.\n", MODNAME);
+                return ret;
+        }
 
-	sema_init(&cdev_sem, 1);
+        sema_init(&cdev_sem, 1);
 
-	return 0;
+        return 0;
 }
 
-static void __exit chardev_exit(void)
+static void __exit exit_chardev(void)
 {
-	dev_t dev;
+        dev_t dev;
 
-	dev = MKDEV(CHAR_MAJOR, 0);
-	cdev_del(&cdev);
-	unregister_chrdev_region(dev, CHAR_MINOR);
+        dev = MKDEV(CHAR_MAJOR, 0);
+        cdev_del(&cdev);
+        unregister_chrdev_region(dev, CHAR_MINOR);
 }
 
-module_init(chardev_init);
-module_exit(chardev_exit);
+module_init(init_chardev);
+module_exit(exit_chardev);
