@@ -1,39 +1,39 @@
-obj-m	:= strcdev.o
-clean-files := *.o *.ko *.mod.[co] *.symvers *.order
-clean-files-all	:=	strcdev.c convert.txt *.tmp .*.cmd
+#
+#    Makefile for strcdev
+#
 
-TARGET	:= strcdev.ko
+obj-m	= strcdev.o
+TARGET	= strcdev.ko
 PREFIX	:= /lib/modules/$(shell uname -r)/kernel/drivers/block
 KERNDIR	:= /lib/modules/$(shell uname -r)/build
 BUILDIR	:= $(shell pwd)
-EXTRA_CFLAGS +=
 MAKE	:= make
-CC		:= cc
-RM		:= rm
+CC	:= cc
+RM	:= rm
 
 all: $(TARGET)
 
-strcdev.ko:	strcdev.c
+$(TARGET): $(TARGET:.ko=.c)
 	$(MAKE) -C $(KERNDIR) SUBDIRS=$(BUILDIR) modules
 
-install:
-	cp -v strcdev.ko $(PREFIX)/strcdev.ko
-	mknod /dev/strcdev c 250 0
-	chmod 0666 /dev/strcdev
+install: install-module mknod
+
+install-module: $(TARGET)
+	cp strcdev.ko $(PREFIX)/strcdev.ko
 
 mknod:
 	mknod /dev/strcdev c 250 0
 	chmod 0666 /dev/strcdev
 
+uninstall: uninstall-module rmnod
+
+uninstall-module:
+	-$(RM) -f $(PREFIX)/strcdev.ko
+
 rmnod:
 	-$(RM) -f /dev/strcdev
 
-uninstall:
-	-$(RM) -f $(PREFIX)/strcdev.ko
-	-$(RM) -f /dev/strcdev
-
 clean:
-	-$(RM) -fv $(obj-m) $(clean-files)
+	-$(RM) -f *.o *.ko *.mod.[co] *.symvers *.order
 
-clean_all:
-	-$(RM) -fv $(obj-m) $(clean-files) $(clean-files-all)
+.PHONY:	all install install-module mknod uninstall uninstall-module rmnod clean
