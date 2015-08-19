@@ -1,6 +1,6 @@
 strcdev
 =======
-![default](http://40.media.tumblr.com/52ebc5a2e972cc02a67bcd7c9cefaa79/tumblr_nizhm7Pf0t1u2jamko1_1280.png)   
+![default](http://40.media.tumblr.com/a9527193faccaafd48f864f13243ebeb/tumblr_ntc4l6WcD61u2jamko1_1280.png)   
 
 お好みのテキストファイルから改行区切りで配列を生成し、ランダムに出力するキャラクタデバイスドライバです。	
 
